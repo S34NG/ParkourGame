@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Traps
   layers:
   - Default
   - TransparentFX
@@ -47,12 +48,12 @@ TagManager:
   - name: Player
     uniqueID: 3295324791
     locked: 0
-  - name: Terrains
-    uniqueID: 1086278789
+  - name: Traps
+    uniqueID: 3090523671
     locked: 0
   - name: Wall
     uniqueID: 2663290253
     locked: 0
-  - name: Traps
-    uniqueID: 3090523671
+  - name: Terrains
+    uniqueID: 1086278789
     locked: 0
