@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,6 +8,7 @@ public class Player : MonoBehaviour
     // Move Info
     [Header("Move Info")]
     [SerializeField] private float jumpForce = 12f;
+    [SerializeField] private float doubleJumpForce = 8f;
     [SerializeField] private float speed = 2f;
 
     // Ground Check
@@ -27,6 +29,25 @@ public class Player : MonoBehaviour
     private int facingDirection = 1;
     [SerializeField] private Vector2 wallJumpDirection;
 
+    //Buffer Jump
+    [Header("Buffer Jump Info")]
+    [SerializeField] private float bufferJumpTime;
+    private float bufferJumpCounter;
+
+    // Cayote Jump
+    [Header("Cayote Jump Info")]
+    [SerializeField] private float cayoteJumpTime;
+    private float cayoteJumpCounter;
+    private bool canHaveCayoteJump;
+
+    // Knock Back
+    [Header("Knockback info")]
+    [SerializeField] private Vector2 knockBackDirection;
+    [SerializeField] private float knockBackTime;
+    [SerializeField] private float knockBackProtectionTime;
+    private bool isKnock;
+    private bool canBeKnock = true;
+
     // Reference
     private bool canMove = true;
 
@@ -36,13 +57,14 @@ public class Player : MonoBehaviour
     private bool facingRight = true;
     private float moveInput;
 
-
+    private float defaultJumpForce;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
+        defaultJumpForce = jumpForce;
 
     }
 
@@ -51,13 +73,39 @@ public class Player : MonoBehaviour
         FlipController();
         CollisionCheck();
         AnimatorController();
+
+        if(isKnock)
+        {
+            return;
+        }
+
         CheckInput();
+        
+        bufferJumpCounter -= Time.deltaTime;
+        cayoteJumpCounter -= Time.deltaTime;
 
         // Check Ground
         if (isGrounded)
         {
             canMove = true;
             canDoubleJump = true;
+
+            if(bufferJumpCounter > 0)
+            {
+                bufferJumpCounter = -1;
+                Jump();
+            }
+            canHaveCayoteJump = true;
+
+        }
+        else
+        {
+            if (canHaveCayoteJump)
+            {
+                canHaveCayoteJump = false;
+                cayoteJumpCounter = cayoteJumpTime;
+
+            }
         }
 
         // Check wall Detected and Slide
@@ -113,7 +161,7 @@ public class Player : MonoBehaviour
 
         animator.SetBool("isWallDetected", isWallDetected);
 
-        
+        animator.SetBool("isKnock", isKnock);
         
 
     }
@@ -156,7 +204,13 @@ public class Player : MonoBehaviour
 
     private void JumpButton()
     {
-        if (isGrounded)
+
+        if(!isGrounded)
+        {
+            bufferJumpCounter = bufferJumpTime;
+        }
+
+        if (isGrounded || cayoteJumpCounter > 0)
         {
             Jump();
         }
@@ -164,7 +218,10 @@ public class Player : MonoBehaviour
         {
             canMove = true;
             canDoubleJump = false;
+            jumpForce = doubleJumpForce;
             Jump();
+            jumpForce = defaultJumpForce;
+
         }
         else if (isWallSliding)
         {
@@ -187,6 +244,51 @@ public class Player : MonoBehaviour
 
         rb.velocity = new Vector2(wallJumpDirection.x * -facingDirection, wallJumpDirection.y);
 
+    }
+
+    // Kncokback
+    public void KnockBack(Transform damageTransform)
+    {
+        if (!canBeKnock)
+        {
+            return;
+        }
+
+        isKnock = true;
+        canBeKnock = false;
+
+        #region Define horizontal direction for knockback
+        int hDirection = 0;
+
+        if (transform.position.x > damageTransform.position.x)
+        {
+            hDirection = 1;
+        }
+        else if (transform.position.x < transform.position.x)
+        {
+            hDirection = -1;
+        }
+        else
+        {
+            hDirection = 0;
+        }
+
+        #endregion
+
+        rb.velocity = new Vector2(knockBackDirection.x * hDirection, knockBackDirection.y);
+
+        Invoke("CancelKnockBack", knockBackTime);
+        Invoke("AllowKnockBack", knockBackProtectionTime);
+    }
+
+    private void CancelKnockBack()
+    {
+        isKnock = false;
+    }
+
+    private void AllowKnockBack()
+    {
+        canBeKnock = true;
     }
 
 

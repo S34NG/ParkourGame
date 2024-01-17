@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Traps : MonoBehaviour
@@ -8,7 +9,10 @@ public class Traps : MonoBehaviour
     {
         if(collision.GetComponent<Player>() != null){
 
-            Debug.Log("Knock Knock");
+            Player player = collision.GetComponent<Player>();
+
+            player.KnockBack(transform);
+
         }
     }
 }
