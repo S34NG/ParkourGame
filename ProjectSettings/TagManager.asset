@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Traps
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -13,10 +12,10 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Wall
-  - Traps
-  - 
-  - 
+  - Player
+  - Enemy
+  - Bullet
+  - Platform
   - 
   - 
   - 
@@ -43,17 +42,17 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Background
-    uniqueID: 2053104897
-    locked: 0
-  - name: Player
-    uniqueID: 3295324791
+    uniqueID: 3699348499
     locked: 0
   - name: Traps
-    uniqueID: 3090523671
+    uniqueID: 608062247
     locked: 0
-  - name: Wall
-    uniqueID: 2663290253
+  - name: Ground
+    uniqueID: 2529140381
     locked: 0
-  - name: Terrains
-    uniqueID: 1086278789
+  - name: Enemy
+    uniqueID: 2679450731
+    locked: 0
+  - name: Player
+    uniqueID: 3757592127
     locked: 0

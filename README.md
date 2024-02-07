@@ -1,2 +1,0 @@
-# ParkourGame
-A graduation project
