@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour
 
             if (unlocked)
             {
-                Debug.Log("A");
+                // Debug.Log("A");
                 PlayerPrefs.SetInt("Level" + i + "Unlocked", 0);
                 SceneManager.LoadScene("Level 1");
             }

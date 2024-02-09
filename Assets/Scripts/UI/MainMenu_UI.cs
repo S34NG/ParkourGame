@@ -36,6 +36,12 @@ public class MainMenu_UI : MonoBehaviour
         uiMenu.SetActive(true);
     }
 
+    public void QuitGame()
+    {
+        Debug.Log("Quit");
+        Application.Quit();
+    }
+
     public void SetGameDifficulty(int i) => GameManager.instance.difficulty = i;
 
 }
