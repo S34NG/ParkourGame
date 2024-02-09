@@ -216,7 +216,7 @@ MonoBehaviour:
   checkRadius: 2
   whatIsPlayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   groundBehindCheck: {fileID: 3799414785693560458}
   attackCooldown: 1.5
   bulletSpeed: 8
